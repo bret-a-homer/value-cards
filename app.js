@@ -1,10 +1,11 @@
 (() => {
   'use strict';
 
-  // Optional usage counting with GoatCounter (free, no cookies, no personal data).
-  // Create a site at https://www.goatcounter.com and put its code here,
-  // e.g. 'valuecards' for https://valuecards.goatcounter.com. Leave empty to disable.
-  const GOATCOUNTER_CODE = '';
+  // Anonymous usage totals via Abacus (https://abacus.jasoncameron.dev), a free counter
+  // with no sign-up. Only two numbers are sent: +1 on "started" and +1 on "completed".
+  // Check them at https://abacus.jasoncameron.dev/get/<COUNTER_NAMESPACE>/started (or /completed).
+  // Set to '' to disable.
+  const COUNTER_NAMESPACE = 'bret-a-homer-value-cards';
 
   const STORE_KEY = 'value-cards:v1';
   const NAME_MAX = 24;
@@ -111,18 +112,12 @@
 
   // ---------- Usage counting ----------
 
-  if (GOATCOUNTER_CODE) {
-    const s = document.createElement('script');
-    s.async = true;
-    s.src = 'https://gc.zgo.at/count.js';
-    s.dataset.goatcounter = `https://${GOATCOUNTER_CODE}.goatcounter.com/count`;
-    document.head.appendChild(s);
-  }
+  const isLocal = ['localhost', '127.0.0.1', ''].includes(location.hostname);
   function countEvent(name) {
+    if (!COUNTER_NAMESPACE || isLocal) return;
     try {
-      if (window.goatcounter && window.goatcounter.count) {
-        window.goatcounter.count({ path: name, title: name, event: true });
-      }
+      fetch(`https://abacus.jasoncameron.dev/hit/${COUNTER_NAMESPACE}/${name}`, { mode: 'no-cors', keepalive: true })
+        .catch(() => {});
     } catch (e) { /* ignore */ }
   }
 

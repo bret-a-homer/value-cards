@@ -23,18 +23,16 @@ python3 -m http.server 8123
 2. In the repo, go to **Settings → Pages**, and set **Source** to "Deploy from a branch", **Branch** to `main`, and the folder to `/ (root)`.
 3. The site goes live at `https://<username>.github.io/<repo-name>/`.
 
-## Counting visitors (optional)
+## Usage counts
 
-The app can report visits and completions to [GoatCounter](https://www.goatcounter.com), which is free for personal use and sets no cookies.
+The app keeps two anonymous running totals using [Abacus](https://abacus.jasoncameron.dev), a free counter service that needs no account. Nothing else is sent.
 
-1. Sign up and pick a site code, for example `valuecards`.
-2. In `app.js`, set `const GOATCOUNTER_CODE = 'valuecards';`.
-3. Your dashboard (`https://valuecards.goatcounter.com`) then shows:
-   - page views
-   - a `started` event each time someone begins a sort
-   - a `completed` event each time someone reaches their results
+- **Started:** the number of times someone began a sort. See https://abacus.jasoncameron.dev/get/bret-a-homer-value-cards/started
+- **Completed:** the number of times someone reached their results. See https://abacus.jasoncameron.dev/get/bret-a-homer-value-cards/completed
 
-Visits from `localhost` aren't counted.
+Each link returns something like `{"value": 12}`. A link shows `Key not found` until that thing has happened at least once.
+
+Visits from `localhost` aren't counted. To turn counting off, set `COUNTER_NAMESPACE` to `''` in `app.js`.
 
 ## Where the values come from
 
